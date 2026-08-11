@@ -208,24 +208,25 @@ export default function Register() {
                     placeholder="Min 6 characters"
                     style={inputStyle} onFocus={onFocus} onBlur={onBlur}
                   />
-                  {studentForm.password && (
-                    <div style={{ marginTop: '8px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: '600', color: 'var(--text-secondary)' }}>Password Strength:</span>
-                        <span style={{ fontSize: '11px', fontWeight: '700', color: checkPasswordStrength(studentForm.password).color }}>
-                          {checkPasswordStrength(studentForm.password).label}
-                        </span>
-                      </div>
-                      <div style={{ height: '4px', width: '100%', background: 'var(--border)', borderRadius: '2px', overflow: 'hidden' }}>
-                        <div style={{
-                          height: '100%',
-                          width: checkPasswordStrength(studentForm.password).width,
-                          backgroundColor: checkPasswordStrength(studentForm.password).color,
-                          transition: 'width 0.3s ease, background-color 0.3s ease'
-                        }} />
-                      </div>
+                  {/* Password Strength Bar — always shown once user types */}
+                  <div style={{ marginTop: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: '600', color: '#6b7280' }}>Password Strength:</span>
+                      <span style={{ fontSize: '11px', fontWeight: '700', color: studentForm.password ? checkPasswordStrength(studentForm.password).color : '#9ca3af' }}>
+                        {studentForm.password ? checkPasswordStrength(studentForm.password).label : 'Enter a password'}
+                      </span>
                     </div>
-                  )}
+                    <div style={{ height: '5px', width: '100%', background: '#e5e7eb', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%',
+                        width: studentForm.password ? checkPasswordStrength(studentForm.password).width : '0%',
+                        backgroundColor: studentForm.password ? checkPasswordStrength(studentForm.password).color : '#e5e7eb',
+                        transition: 'width 0.3s ease, background-color 0.3s ease',
+                        borderRadius: '3px',
+                      }} />
+                    </div>
+                  </div>
+
                 </div>
                 <div>
                   <label style={labelStyle}>COLLEGE / UNIVERSITY</label>
@@ -271,18 +272,19 @@ export default function Register() {
                   />
                   {recruiterForm.password && (
                     <div style={{ marginTop: '8px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: '600', color: 'var(--text-secondary)' }}>Password Strength:</span>
-                        <span style={{ fontSize: '11px', fontWeight: '700', color: checkPasswordStrength(recruiterForm.password).color }}>
-                          {checkPasswordStrength(recruiterForm.password).label}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '600', color: '#6b7280' }}>Password Strength:</span>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: recruiterForm.password ? checkPasswordStrength(recruiterForm.password).color : '#9ca3af' }}>
+                          {recruiterForm.password ? checkPasswordStrength(recruiterForm.password).label : 'Enter a password'}
                         </span>
                       </div>
-                      <div style={{ height: '4px', width: '100%', background: 'var(--border)', borderRadius: '2px', overflow: 'hidden' }}>
+                      <div style={{ height: '5px', width: '100%', background: '#e5e7eb', borderRadius: '3px', overflow: 'hidden' }}>
                         <div style={{
                           height: '100%',
                           width: checkPasswordStrength(recruiterForm.password).width,
                           backgroundColor: checkPasswordStrength(recruiterForm.password).color,
-                          transition: 'width 0.3s ease, background-color 0.3s ease'
+                          transition: 'width 0.3s ease, background-color 0.3s ease',
+                          borderRadius: '3px',
                         }} />
                       </div>
                     </div>
