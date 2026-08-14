@@ -50,12 +50,8 @@ export default function MockTestExam() {
     const newCount = violationsRef.current + 1
     violationsRef.current = newCount
     setViolations(newCount)
-    if (newCount >= 3) {
-      handleSubmit(true)
-    } else {
-      setWarningType(type)
-      setWarningVisible(true)
-    }
+    // Auto-submit immediately on first violation — zero tolerance
+    handleSubmit(true)
   }, [handleSubmit])
 
   // ── Timer ────────────────────────────────────────────────────────────────────
