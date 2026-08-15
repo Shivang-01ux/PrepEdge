@@ -27,6 +27,7 @@ public class DataSeeder implements CommandLineRunner {
     private final CompanyRepository companyRepository;
     private final MockTestRepository mockTestRepository;
     private final MockTestQuestionRepository mockTestQuestionRepository;
+    private final MockTestAttemptRepository mockTestAttemptRepository;
 
     private final Map<String, Subject> subjectCache = new HashMap<>();
     private final Map<String, Topic> topicCache = new HashMap<>();
@@ -150,28 +151,64 @@ public class DataSeeder implements CommandLineRunner {
             String filename = resource.getFilename();
             if (filename == null) continue;
 
-            String trackingKey = "mock-test::" + filename;
-            if (seedFileRepository.existsByFilename(trackingKey)) {
-                log.info("Skipping mock test {} — already imported.", filename);
-                continue;
-            }
-
-            log.info("Importing mock test: {}", filename);
+            log.info("Checking mock test file: {}", filename);
             try (InputStream is = resource.getInputStream()) {
                 SeedMockTest smt = mapper.readValue(is, SeedMockTest.class);
+
+                // Calculate expected question count from JSON
+                int expectedQ = 0;
+                if (smt.sections() != null && !smt.sections().isEmpty()) {
+                    for (SeedSection sec : smt.sections()) {
+                        expectedQ += sec.questions().size();
+                    }
+                } else if (smt.questions() != null) {
+                    expectedQ = smt.questions().size();
+                }
+
+                String trackingKey = "mock-test::" + filename;
+
+                // Find existing company and mock test to compare counts
+                Company existingCompany = companyRepository.findBySlug(smt.companySlug()).orElse(null);
+                MockTest existingTest = null;
+                if (existingCompany != null) {
+                    existingTest = mockTestRepository
+                            .findByTitleAndCompanyId(smt.title(), existingCompany.getId())
+                            .orElse(null);
+                }
+
+                boolean alreadyUpToDate = existingTest != null
+                        && existingTest.getTotalQuestions() == expectedQ;
+
+                if (alreadyUpToDate) {
+                    log.info("Skipping '{}' — already up to date ({} questions).", smt.title(), expectedQ);
+                    continue;
+                }
+
+                // Stale or missing — delete existing data and re-import
+                if (existingTest != null) {
+                    log.info("Re-importing '{}' — stale ({} → {} questions).",
+                            smt.title(), existingTest.getTotalQuestions(), expectedQ);
+                    // Delete attempts first to avoid FK constraint violation
+                    mockTestAttemptRepository.deleteAllByMockTestId(existingTest.getId());
+                    mockTestRepository.delete(existingTest);
+                    // Remove old seed_file tracking record so we can re-save it
+                    seedFileRepository.findByFilename(trackingKey)
+                            .ifPresent(seedFileRepository::delete);
+                } else {
+                    log.info("Importing mock test: {}", filename);
+                }
+
                 importMockTest(smt);
 
                 seedFileRepository.save(SeedFile.builder()
                         .filename(trackingKey)
-                        .questionsImported(smt.questions().size())
+                        .questionsImported(expectedQ)
                         .build());
 
-                log.info("Imported mock test '{}' with {} questions.",
-                        smt.title(), smt.questions().size());
+                log.info("Imported mock test '{}' with {} questions.", smt.title(), expectedQ);
 
             } catch (Exception e) {
-                log.error("Failed to import mock test {}: {}",
-                        filename, e.getMessage());
+                log.error("Failed to import mock test {}: {}", filename, e.getMessage());
             }
         }
     }

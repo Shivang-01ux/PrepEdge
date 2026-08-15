@@ -11,4 +11,5 @@ public interface MockTestAttemptRepository
     Optional<MockTestAttempt> findByUserIdAndMockTestIdAndStatus(
             Long userId, Long mockTestId,
             com.prepedge.entity.MockTestStatus status);
-}
+    void deleteAllByMockTestId(Long mockTestId);
+}
