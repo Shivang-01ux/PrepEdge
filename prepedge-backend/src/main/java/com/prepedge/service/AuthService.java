@@ -28,26 +28,19 @@ public class AuthService {
             throw new RuntimeException("Email already registered");
         }
 
-        // Determine role — defaults to ROLE_STUDENT
-        boolean isRecruiter = "ROLE_RECRUITER".equalsIgnoreCase(request.getRole());
-        Role role = isRecruiter ? Role.ROLE_RECRUITER : Role.ROLE_STUDENT;
-
-        // Recruiters store company name in the college field
-        String collegeOrCompany = isRecruiter
-                ? request.getCompanyName()
-                : request.getCollege();
-
+        // Public registration always creates ROLE_STUDENT
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .college(collegeOrCompany)
-                .role(role)
+                .college(request.getCollege())
+                .department(request.getDepartment())
+                .role(Role.ROLE_STUDENT)
                 .build();
 
         userRepository.save(user);
 
-        // Send welcome email asynchronously — does not block the response
+        // Send welcome email asynchronously
         emailService.sendWelcomeEmail(user);
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
@@ -57,7 +50,8 @@ public class AuthService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole().name(),
-                user.getCollege()
+                user.getCollege(),
+                user.getDepartment()
         );
     }
 
@@ -76,7 +70,8 @@ public class AuthService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole().name(),
-                user.getCollege()
+                user.getCollege(),
+                user.getDepartment()
         );
     }
 }

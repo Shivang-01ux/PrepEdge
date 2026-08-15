@@ -1,5 +1,6 @@
 package com.prepedge.repository;
 
+import com.prepedge.entity.Role;
 import com.prepedge.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
@@ -10,4 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
     List<User> findByCollegeContainingIgnoreCase(String college);
+    List<User> findByDepartmentAndRole(String department, Role role);
+    List<User> findByRole(Role role);
 }

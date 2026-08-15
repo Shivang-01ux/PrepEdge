@@ -6,10 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class RegisterRequest {
+public class CreateFacultyRequest {
 
-    @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+    @NotBlank(message = "Name is required")
     private String username;
 
     @NotBlank(message = "Email is required")
@@ -20,8 +19,8 @@ public class RegisterRequest {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-    private String college;
-
-    /** e.g. "CSE", "ECE", "IT", "MECH" */
+    @NotBlank(message = "Department is required")
     private String department;
+
+    private String college;
 }

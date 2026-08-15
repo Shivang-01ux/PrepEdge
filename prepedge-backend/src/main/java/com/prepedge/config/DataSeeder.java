@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -28,14 +29,35 @@ public class DataSeeder implements CommandLineRunner {
     private final MockTestRepository mockTestRepository;
     private final MockTestQuestionRepository mockTestQuestionRepository;
     private final MockTestAttemptRepository mockTestAttemptRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private final Map<String, Subject> subjectCache = new HashMap<>();
     private final Map<String, Topic> topicCache = new HashMap<>();
 
     @Override
     public void run(String... args) throws Exception {
+        bootstrapAdmin();
         seedQuestionFiles();
         seedMockTestFiles();
+    }
+
+    private void bootstrapAdmin() {
+        String adminEmail = "admin@prepedge.com";
+        if (!userRepository.existsByEmail(adminEmail)) {
+            User admin = User.builder()
+                    .username("Admin")
+                    .email(adminEmail)
+                    .password(passwordEncoder.encode("PrepEdge@Admin2026"))
+                    .college("PrepEdge Institute")
+                    .department("Administration")
+                    .role(Role.ROLE_ADMIN)
+                    .build();
+            userRepository.save(admin);
+            log.info("Bootstrap: Admin account created → {}", adminEmail);
+        } else {
+            log.info("Bootstrap: Admin account already exists.");
+        }
     }
 
     // ── Question bank seeding ──────────────────────────────────────────────

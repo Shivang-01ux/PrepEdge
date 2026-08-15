@@ -26,6 +26,9 @@ public class User {
     @Column(length = 100)
     private String college;
 
+    @Column(length = 100)
+    private String department;
+
     @Column(nullable = false)
     private String password;
 
