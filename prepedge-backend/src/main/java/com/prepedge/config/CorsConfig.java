@@ -14,10 +14,10 @@ public class CorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-            "https://prep-edge-snowy.vercel.app",
-            "https://prep-edge-gold.vercel.app",
-            "https://prep-edge-37rmg7pdu-thakurshivang96-gmailcoms-projects.vercel.app",
+        // Wildcard patterns to support all Vercel preview deployment URLs
+        config.setAllowedOriginPatterns(List.of(
+            "https://prep-edge-*.vercel.app",
+            "https://*-thakurshivang96-gmailcoms-projects.vercel.app",
             "http://localhost:5173",
             "http://localhost:5174",
             "http://localhost:5175"
