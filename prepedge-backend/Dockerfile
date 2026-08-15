@@ -11,4 +11,16 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# JVM tuned for Render free tier (512MB RAM):
+# -Xms128m  = start heap at 128MB
+# -Xmx350m  = max heap 350MB (leaves room for OS + metaspace)
+# G1GC = better throughput under concurrent exam load
+# XX:+UseContainerSupport = respect Docker container memory limits
+ENTRYPOINT ["java", \
+  "-Xms128m", "-Xmx350m", \
+  "-XX:+UseG1GC", \
+  "-XX:+UseContainerSupport", \
+  "-XX:MaxRAMPercentage=70.0", \
+  "-XX:+OptimizeStringConcat", \
+  "-Djava.security.egd=file:/dev/./urandom", \
+  "-jar", "app.jar"]
