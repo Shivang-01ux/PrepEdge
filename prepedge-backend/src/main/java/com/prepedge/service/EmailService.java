@@ -59,16 +59,16 @@ public class EmailService {
     }
 
     private String buildSubject(User user) {
-        if (user.getRole() == Role.ROLE_RECRUITER) {
-            return "Welcome to PrepEdge Recruiter Portal, " + user.getUsername();
+        if (user.getRole() == Role.ROLE_FACULTY) {
+            return "Welcome to PrepEdge Faculty Portal, " + user.getUsername();
+        }
+        if (user.getRole() == Role.ROLE_ADMIN) {
+            return "PrepEdge Admin Account Ready, " + user.getUsername();
         }
         return "Welcome to PrepEdge, " + user.getUsername() + " - Your placement journey starts now";
     }
 
     private String buildHtmlBody(User user) {
-        if (user.getRole() == Role.ROLE_RECRUITER) {
-            return buildRecruiterEmail(user);
-        }
         return buildStudentEmail(user);
     }
 
