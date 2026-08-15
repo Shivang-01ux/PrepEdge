@@ -185,43 +185,97 @@ public class DataSeeder implements CommandLineRunner {
                                 .slug(smt.companySlug())
                                 .build()));
 
-        // Find question by exact text match, skip if not found
+        // Determine total questions
+        int totalQ = 0;
+        if (smt.sections() != null && !smt.sections().isEmpty()) {
+            for (SeedSection sec : smt.sections()) {
+                totalQ += sec.questions().size();
+            }
+        } else if (smt.questions() != null) {
+            totalQ = smt.questions().size();
+        }
+
         MockTest mockTest = MockTest.builder()
                 .company(company)
                 .title(smt.title())
                 .description(smt.description())
                 .durationMinutes(smt.durationMinutes())
-                .totalQuestions(smt.questions().size())
+                .totalQuestions(totalQ)
                 .active(true)
                 .build();
-
         mockTest = mockTestRepository.save(mockTest);
 
         int order = 1;
-        for (String questionText : smt.questions()) {
-            List<Question> matches = questionRepository
-                    .findByTextContainingIgnoreCase(questionText.substring(0,
-                            Math.min(50, questionText.length())));
 
-            if (matches.isEmpty()) {
-                log.warn("No question found matching: {}...",
-                        questionText.substring(0, Math.min(40,
-                                questionText.length())));
-                continue;
+        // ── New sectioned format (self-contained inline questions) ──
+        if (smt.sections() != null && !smt.sections().isEmpty()) {
+            for (SeedSection section : smt.sections()) {
+                String subjectName = section.subject() != null ? section.subject() : section.name();
+                String topicName   = section.topic()   != null ? section.topic()   : section.name();
+
+                Subject subject = subjectCache.computeIfAbsent(subjectName, k ->
+                        subjectRepository.findByName(k)
+                                .orElseGet(() -> subjectRepository.save(
+                                        Subject.builder().name(k).build())));
+
+                Topic topic = topicCache.computeIfAbsent(topicName, k ->
+                        topicRepository.findByName(k)
+                                .orElseGet(() -> topicRepository.save(
+                                        Topic.builder().name(k).subject(subject).build())));
+
+                for (SeedInlineQuestion iq : section.questions()) {
+                    Question q = Question.builder()
+                            .text(iq.text())
+                            .subject(subject)
+                            .topic(topic)
+                            .difficulty("MEDIUM")
+                            .explanation(iq.explanation() != null ? iq.explanation() : "")
+                            .build();
+                    q = questionRepository.save(q);
+
+                    List<Option> opts = new java.util.ArrayList<>();
+                    for (int i = 0; i < iq.options().size(); i++) {
+                        opts.add(Option.builder()
+                                .text(iq.options().get(i))
+                                .correct(i == iq.correctIndex())
+                                .question(q)
+                                .build());
+                    }
+                    q.setOptions(opts);
+                    questionRepository.save(q);
+
+                    MockTestQuestion mtq = MockTestQuestion.builder()
+                            .mockTest(mockTest)
+                            .question(q)
+                            .questionOrder(order++)
+                            .build();
+                    mockTestQuestionRepository.save(mtq);
+                }
             }
-
-            Question q = matches.get(0);
-            MockTestQuestion mtq = MockTestQuestion.builder()
-                    .mockTest(mockTest)
-                    .question(q)
-                    .questionOrder(order++)
-                    .build();
-            mockTestQuestionRepository.save(mtq);
+        } else if (smt.questions() != null) {
+            // ── Legacy format: match by question bank text ──
+            for (String questionText : smt.questions()) {
+                List<Question> matches = questionRepository
+                        .findByTextContainingIgnoreCase(questionText.substring(0,
+                                Math.min(50, questionText.length())));
+                if (matches.isEmpty()) {
+                    log.warn("No question found matching: {}...",
+                            questionText.substring(0, Math.min(40, questionText.length())));
+                    continue;
+                }
+                Question q = matches.get(0);
+                MockTestQuestion mtq = MockTestQuestion.builder()
+                        .mockTest(mockTest)
+                        .question(q)
+                        .questionOrder(order++)
+                        .build();
+                mockTestQuestionRepository.save(mtq);
+            }
         }
 
-        // Update total_questions to reflect actual matched count
         mockTest.setTotalQuestions(order - 1);
         mockTestRepository.save(mockTest);
+        log.info("Imported '{}' with {} questions.", smt.title(), order - 1);
     }
 
     // ── Internal record types ──────────────────────────────────────────────
@@ -234,5 +288,23 @@ public class DataSeeder implements CommandLineRunner {
 
     private record SeedMockTest(
             String companyName, String companySlug, String title,
-            String description, int durationMinutes, List<String> questions) {}
+            String description, int durationMinutes,
+            List<String> questions,         // legacy: text refs to question bank
+            List<SeedSection> sections      // new: self-contained sectioned questions
+    ) {}
+
+    private record SeedSection(
+            String name,
+            String subject,
+            String topic,
+            int timeMinutes,
+            List<SeedInlineQuestion> questions
+    ) {}
+
+    private record SeedInlineQuestion(
+            String text,
+            List<String> options,
+            int correctIndex,
+            String explanation
+    ) {}
 }

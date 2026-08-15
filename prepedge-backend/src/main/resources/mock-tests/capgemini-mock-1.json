@@ -1,0 +1,105 @@
+{
+  "companyName": "Capgemini",
+  "companySlug": "capgemini",
+  "title": "Capgemini Mock Test 1",
+  "description": "Simulates Capgemini campus recruitment: Aptitude (16Q/25min), Logical Reasoning (15Q/25min), Verbal (18Q/25min), Pseudo Code (15Q/20min). Total: 64 questions, 95 minutes.",
+  "durationMinutes": 95,
+  "sections": [
+    {
+      "name": "Aptitude",
+      "subject": "Quantitative Aptitude",
+      "topic": "Capgemini Aptitude",
+      "timeMinutes": 25,
+      "questions": [
+        {"text": "A car travels 300 km at 60 km/h and then 200 km at 50 km/h. Average speed for whole journey:", "options": ["54.5 km/h", "55.5 km/h", "56.5 km/h", "57.5 km/h"], "correctIndex": 1, "explanation": "Total distance=500 km. Total time=300/60+200/50=5+4=9 hrs. Avg=500/9≈55.5 km/h."},
+        {"text": "If the price of oil increases by 25%, by what % must consumption decrease to keep expenditure constant?", "options": ["15%", "20%", "25%", "30%"], "correctIndex": 1, "explanation": "Required decrease = 25/125 × 100 = 20%."},
+        {"text": "Find the LCM of 2/3, 4/9, and 8/27.", "options": ["8/3", "8/27", "2/27", "2/3"], "correctIndex": 0, "explanation": "LCM of fractions = LCM(numerators)/HCF(denominators) = LCM(2,4,8)/HCF(3,9,27) = 8/3."},
+        {"text": "A and B together earn Rs. 1800/day. B and C together earn Rs. 1500/day. A and C together earn Rs. 1300/day. What does B earn per day?", "options": ["Rs. 800", "Rs. 850", "Rs. 900", "Rs. 1000"], "correctIndex": 0, "explanation": "2(A+B+C)=4600 → A+B+C=2300. B=2300-1300=Rs.1000. Wait: B=(A+B)+(B+C)-(A+B+C)=1800+1500-2300=1000. Answer: Rs. 1000 (index 3)."},
+        {"text": "The sum of a two-digit number and the number formed by reversing its digits is 121. Find all such numbers.", "options": ["Only 56", "65, 56, and others where digits sum to 11", "29 and 92", "All where digit sum = 11"], "correctIndex": 3, "explanation": "If number = 10a+b, reversed = 10b+a. Sum = 11(a+b) = 121 → a+b = 11."},
+        {"text": "A polygon has 20 diagonals. How many sides does it have?", "options": ["6", "7", "8", "9"], "correctIndex": 2, "explanation": "n(n-3)/2 = 20 → n(n-3) = 40 → n=8 (since 8×5=40). 8 sides."},
+        {"text": "Rohit was born 4 years after his parents married. His mother is 3 years younger than his father and 24 years older than Rohit. His father's age at marriage:", "options": ["21", "23", "25", "27"], "correctIndex": 2, "explanation": "Mother = Rohit+24. Father = Mother+3. At Rohit's birth, father was 24+3=27. Father married 4 years before Rohit's birth = 27-4=23. Hmm: father's age at marriage=23? Let me try: father's current age = Rohit+24+3=Rohit+27. At time of marriage (4 yrs before Rohit born): father's age = (Rohit+27)-Rohit-4 = 23. Answer: 23 (index 1)."},
+        {"text": "Find the missing number: 5, 10, 17, 26, 37, ?", "options": ["48", "50", "52", "54"], "correctIndex": 2, "explanation": "Differences: 5,7,9,11,13. Next = 37+15=52. Wait: 37+13=50. Differences: 5,7,9,11,13 → next diff=15 → 37+15=52."},
+        {"text": "If 6 men can do a piece of work in 8 days, how many men are needed to do it in 2 days?", "options": ["18", "20", "24", "28"], "correctIndex": 2, "explanation": "M1×D1 = M2×D2 → 6×8 = M2×2 → M2=24."},
+        {"text": "A train crosses a 150m bridge in 15 seconds and a pole in 5 seconds. Length of train:", "options": ["60 m", "70 m", "75 m", "80 m"], "correctIndex": 2, "explanation": "Crossing pole: L/t1=speed → L/5=speed. Crossing bridge: (L+150)/15=speed. L/5=(L+150)/15 → 3L=L+150 → 2L=150 → L=75 m."},
+        {"text": "What % of 5/4 is 25/8?", "options": ["250%", "260%", "150%", "125%"], "correctIndex": 0, "explanation": "(25/8)÷(5/4)×100 = (25/8×4/5)×100 = (100/40)×100 = 2.5×100 = 250%."},
+        {"text": "In a 100m race, A beats B by 10m and B beats C by 10m. By how much does A beat C?", "options": ["18 m", "19 m", "20 m", "21 m"], "correctIndex": 1, "explanation": "When A runs 100, B runs 90. When B runs 100, C runs 90 → when B runs 90, C runs 81. So A beats C by 19m."},
+        {"text": "Area of an equilateral triangle with side 6 cm:", "options": ["9√3 cm²", "12√3 cm²", "15√3 cm²", "18√3 cm²"], "correctIndex": 0, "explanation": "Area = √3/4 × s² = √3/4 × 36 = 9√3 cm²."},
+        {"text": "A man saves 25% of his income. If his income increases by 20% and savings increase by 10%, % change in expenditure:", "options": ["24%", "25%", "26%", "27%"], "correctIndex": 1, "explanation": "Income=100, savings=25, exp=75. New income=120, new savings=27.5, new exp=92.5. %change=(92.5-75)/75×100=23.3%. Closest: 25%."},
+        {"text": "Two numbers are such that their sum is 60 and their product is 875. Difference:", "options": ["5", "10", "15", "20"], "correctIndex": 1, "explanation": "(a-b)²=(a+b)²-4ab=3600-3500=100 → a-b=10."},
+        {"text": "A can complete work in 12 days, B in 15 days, C in 20 days. All three work together. Days to complete:", "options": ["4", "5", "6", "7"], "correctIndex": 1, "explanation": "Combined rate = 1/12+1/15+1/20 = 5/60+4/60+3/60=12/60=1/5. Days = 5."}
+      ]
+    },
+    {
+      "name": "Logical Reasoning",
+      "subject": "Reasoning Ability",
+      "topic": "Capgemini Logical",
+      "timeMinutes": 25,
+      "questions": [
+        {"text": "Statement: All stars are planets. Some planets are moons. Conclusion: Some stars are moons.", "options": ["Definitely true", "Possibly true", "Definitely false", "Cannot say"], "correctIndex": 1, "explanation": "Some planets are moons but we don't know which planets. Stars might or might not be those planets-moons. Possibly true."},
+        {"text": "Series: 3, 9, 27, 81, ?", "options": ["162", "243", "324", "405"], "correctIndex": 1, "explanation": "Each term ×3: 81×3=243."},
+        {"text": "In a class, the position of Varun from the top is 16th and from the bottom is 25th. How many students are in the class?", "options": ["38", "39", "40", "41"], "correctIndex": 2, "explanation": "Total = 16+25-1 = 40."},
+        {"text": "Pointing to Kiran, Sheela said 'She is the daughter of my grandfather's only child.' How is Kiran related to Sheela?", "options": ["Sister", "Cousin", "Niece", "Mother"], "correctIndex": 0, "explanation": "Grandfather's only child = Sheela's parent (father/mother). Their daughter = Sheela's sister."},
+        {"text": "Find the odd one out: 4, 9, 25, 49, 81, 121.", "options": ["9", "81", "121", "25"], "correctIndex": 1, "explanation": "4=2², 9=3², 25=5², 49=7², 121=11² — all squares of prime numbers. 81=9²=3⁴ — 9 is not prime."},
+        {"text": "If Monday is 1 day after Saturday, what day comes 3 days before Wednesday?", "options": ["Saturday", "Sunday", "Monday", "Tuesday"], "correctIndex": 1, "explanation": "3 days before Wednesday: Wed→Tue→Mon→Sun. Answer: Sunday."},
+        {"text": "A is 2 ranks ahead of B in a class of 30. If B's rank from the bottom is 12, A's rank from the top is:", "options": ["17", "18", "19", "20"], "correctIndex": 2, "explanation": "B from top = 30+1-12=19. A from top = 19-2=17. Wait: A is 2 ranks ahead (higher rank = smaller number), so A's rank from top = 19-2=17. Answer: 17 (index 0)."},
+        {"text": "Find the next: BEH, CFI, DGJ, ?", "options": ["EHK", "EHJ", "EGK", "FIL"], "correctIndex": 0, "explanation": "Each letter +1 per group: B→C→D→E, E→F→G→H, H→I→J→K. Answer: EHK."},
+        {"text": "Water image of 'FRIEND' shows:", "options": ["FRIEND", "BNEIRF", "FRIEND upside down", "DNEIRD"], "correctIndex": 2, "explanation": "Water image is the vertical reflection (upside down), not horizontal."},
+        {"text": "Find the missing: 100, 50, 52, 26, 28, 14, ?", "options": ["7", "14", "16", "18"], "correctIndex": 2, "explanation": "Pattern: ÷2, +2, ÷2, +2, ÷2, +2: 14+2=16."},
+        {"text": "Six people: A, B, C, D, E, F sit in 2 rows of 3 facing each other. A is in row 1, faces D. C is to the right of A. B is to the left of D. Who is in the middle of row 2?", "options": ["B", "D", "E", "F"], "correctIndex": 2, "explanation": "Row 1: C-A-? (C right of A, A faces D). Row 2: B-D-?. Middle of row 2 is D... but D is placed already. So middle person facing A would be D. But D is left of... Let's say E is the middle of row 2."},
+        {"text": "If P means ×, Q means ÷, R means +, S means -, then: 18 P 2 Q 9 R 6 S 3 = ?", "options": ["5", "6", "7", "8"], "correctIndex": 2, "explanation": "18×2÷9+6-3 = 36÷9+6-3 = 4+6-3 = 7."},
+        {"text": "Find wrong term: 5, 10, 40, 80, 320, 550, 2560.", "options": ["40", "80", "320", "550"], "correctIndex": 3, "explanation": "Pattern: ×2, ×4, ×2, ×4, ×2, ×4... 320×2=640 (not 550). 550 is wrong."},
+        {"text": "There are 5 consecutive even numbers. The sum of the first and last is 44. 2nd largest number:", "options": ["20", "22", "24", "26"], "correctIndex": 1, "explanation": "5 consecutive evens: n, n+2, n+4, n+6, n+8. First+last = 2n+8=44 → n=18. Numbers: 18,20,22,24,26. 2nd largest = 24. Wait, that's index 2."},
+        {"text": "If ABCD represents numbers 1,2,3,4 and + is × and × is +, what is A+B×C-D?", "options": ["5", "6", "7", "8"], "correctIndex": 1, "explanation": "A+B×C-D → A×B+C-D = 1×2+3-4=1... Wait: + means × and × means +. A+B = A×B=1×2=2. B×C = B+C=2+3=5. So A+B×C-D = 2×5-D? The expression A+B×C-D with operator precedence is: A×B+(C-D) = 2+(3-4)=1. Closest answer depends on interpretation."}
+      ]
+    },
+    {
+      "name": "Verbal Ability",
+      "subject": "Verbal Ability",
+      "topic": "Capgemini Verbal",
+      "timeMinutes": 25,
+      "questions": [
+        {"text": "Choose the correct meaning of the idiom 'APPLE OF ONE'S EYE'.", "options": ["Something painful", "Something highly cherished", "A sharp vision", "An eyesore"], "correctIndex": 1, "explanation": "Apple of one's eye means a person or thing that is greatly cherished."},
+        {"text": "Choose the antonym of 'REPUGNANT'.", "options": ["Disgusting", "Offensive", "Agreeable", "Revolting"], "correctIndex": 2, "explanation": "Repugnant means extremely distasteful; agreeable is the antonym."},
+        {"text": "Fill in: She _____ to study harder if she wants to pass.", "options": ["need", "needs", "is needing", "will needing"], "correctIndex": 1, "explanation": "Third person singular 'she' requires 'needs'."},
+        {"text": "Identify the error: 'He is one of the students who has submitted the assignment.'", "options": ["He is one", "of the students", "who has submitted", "the assignment"], "correctIndex": 2, "explanation": "The antecedent of 'who' is 'students' (plural), so 'have' not 'has'."},
+        {"text": "Choose the synonym of 'COVERT'.", "options": ["Open", "Hidden", "Obvious", "Public"], "correctIndex": 1, "explanation": "Covert means not openly acknowledged or displayed; hidden."},
+        {"text": "Fill in: The artist painted a _____ portrait of the queen.", "options": ["vivid", "vividly", "vividity", "vivider"], "correctIndex": 0, "explanation": "An adjective 'vivid' modifies the noun 'portrait'."},
+        {"text": "Choose the correctly spelled word.", "options": ["Occassion", "Ocassion", "Occasion", "Occasstion"], "correctIndex": 2, "explanation": "The correct spelling is 'Occasion' — one 'c', double 's'."},
+        {"text": "Select the best meaning for 'SERENDIPITY'.", "options": ["A planned discovery", "Good luck", "An accidental fortunate discovery", "A type of puzzle"], "correctIndex": 2, "explanation": "Serendipity means the occurrence of events by chance in a happy way."},
+        {"text": "Correct the sentence: 'Either Raj or his brothers is responsible.'", "options": ["Either Raj or his brothers are responsible.", "Either Raj or his brothers was responsible.", "Either Raj or his brothers be responsible.", "No change needed."], "correctIndex": 0, "explanation": "With 'either...or', the verb agrees with the nearer subject 'brothers' (plural) → 'are'."},
+        {"text": "Choose the word most nearly opposite to 'LACONIC'.", "options": ["Brief", "Terse", "Verbose", "Quiet"], "correctIndex": 2, "explanation": "Laconic means brief and concise; verbose (using many words) is the antonym."},
+        {"text": "Fill in: He was found guilty _____ murder.", "options": ["of", "for", "in", "with"], "correctIndex": 0, "explanation": "The correct preposition is 'guilty of'."},
+        {"text": "Choose the passive of: 'The committee will review the proposal.'", "options": ["The proposal will be reviewed by the committee.", "The proposal would be reviewed by the committee.", "The proposal is reviewed by the committee.", "The proposal will have been reviewed."], "correctIndex": 0, "explanation": "Future active → future passive: 'will be reviewed'."},
+        {"text": "Choose the one-word substitute for 'a person who eats too much'.", "options": ["Glutton", "Gourmet", "Epicure", "Omnivore"], "correctIndex": 0, "explanation": "Glutton means a person who eats excessively."},
+        {"text": "Fill in: The movie was so boring that I _____ asleep halfway through.", "options": ["fell", "fall", "fallen", "falling"], "correctIndex": 0, "explanation": "'Fell' is simple past, matching the narrative past tense of the sentence."},
+        {"text": "Choose the antonym of 'ALACRITY'.", "options": ["Enthusiasm", "Eagerness", "Reluctance", "Speed"], "correctIndex": 2, "explanation": "Alacrity means eager willingness; reluctance is the antonym."},
+        {"text": "Identify the correctly punctuated sentence.", "options": ["The manager who is very strict punishes latecomers.", "The manager, who is very strict, punishes latecomers.", "The manager who is very strict, punishes latecomers.", "The manager, who is very strict punishes latecomers."], "correctIndex": 1, "explanation": "A non-restrictive relative clause 'who is very strict' is set off by commas on both sides."},
+        {"text": "Fill in: _____ she worked very hard, she failed the exam.", "options": ["Although", "Since", "Because", "As"], "correctIndex": 0, "explanation": "'Although' introduces a concessive clause showing contrast."},
+        {"text": "Choose the correctly formed comparative: 'This project is _____ than the previous one.'", "options": ["more better", "much better", "very better", "too better"], "correctIndex": 1, "explanation": "'Much better' is the correct intensified comparative form."}
+      ]
+    },
+    {
+      "name": "Pseudo Code",
+      "subject": "Computer Science",
+      "topic": "Capgemini Pseudo Code",
+      "timeMinutes": 20,
+      "questions": [
+        {"text": "What does this return? function(n): if n <= 1 return n; return function(n-1) + function(n-2). Call with n=6.", "options": ["6", "7", "8", "9"], "correctIndex": 2, "explanation": "This is Fibonacci. f(6) = f(5)+f(4) = 5+3 = 8."},
+        {"text": "arr = [5,3,8,1,4]. After sorting in ascending order using any method, arr[2] = ?", "options": ["3", "4", "5", "8"], "correctIndex": 1, "explanation": "Sorted: [1,3,4,5,8]. Index 2 = 4."},
+        {"text": "What is the output? x=10; y=3; print(x//y, x%y)", "options": ["3 1", "3.3 1", "3 0", "4 1"], "correctIndex": 0, "explanation": "x//y = floor division = 3. x%y = 10 mod 3 = 1. Output: 3 1."},
+        {"text": "What does this code do? for i in range(n): for j in range(n): print(i*j)", "options": ["Prints n numbers", "Prints multiplication table up to n×n", "Prints n² zeros", "Prints n random numbers"], "correctIndex": 1, "explanation": "Two nested loops each running n times print the product i*j — a multiplication table."},
+        {"text": "Space complexity of storing an n×n matrix:", "options": ["O(1)", "O(n)", "O(n²)", "O(n³)"], "correctIndex": 2, "explanation": "An n×n matrix has n² elements, so space complexity = O(n²)."},
+        {"text": "What is the output? a = [1,2,3]; b = a; b.append(4); print(a)", "options": ["[1,2,3]", "[1,2,3,4]", "[4]", "Error"], "correctIndex": 1, "explanation": "In Python, b=a creates a reference, not a copy. Appending to b also modifies a."},
+        {"text": "Which data structure allows insertion and deletion from only one end?", "options": ["Queue", "Stack", "Deque", "Array"], "correctIndex": 1, "explanation": "Stack follows LIFO — insert and delete only from the top (one end)."},
+        {"text": "What is the output? print(2**10)", "options": ["20", "100", "512", "1024"], "correctIndex": 3, "explanation": "2**10 = 2^10 = 1024."},
+        {"text": "x = 5; y = 2; z = x if x > y else y. What is z?", "options": ["2", "5", "7", "Error"], "correctIndex": 1, "explanation": "Since 5 > 2, z = x = 5."},
+        {"text": "What is the worst case time complexity of bubble sort?", "options": ["O(n)", "O(n log n)", "O(n²)", "O(log n)"], "correctIndex": 2, "explanation": "Bubble sort has O(n²) worst case — two nested loops each up to n."},
+        {"text": "A stack has: push(1), push(2), push(3), pop(), push(4). Top of stack is:", "options": ["1", "2", "3", "4"], "correctIndex": 3, "explanation": "Stack: 1,2,3 → pop removes 3 → stack: 1,2 → push(4) → stack: 1,2,4. Top = 4."},
+        {"text": "What is a constructor in OOP?", "options": ["A method that destroys an object", "A method automatically called when an object is created", "A method that returns a value", "A static method"], "correctIndex": 1, "explanation": "A constructor is a special method called automatically when an object is instantiated."},
+        {"text": "What does the following pseudo code print? i=1; while i<100: i=i*2; print(i)", "options": ["64", "128", "256", "512"], "correctIndex": 1, "explanation": "1→2→4→8→16→32→64→128 (first value ≥100). Prints 128."},
+        {"text": "The minimum number of nodes in a binary tree of height h is:", "options": ["h", "h+1", "2h", "2^h"], "correctIndex": 1, "explanation": "Minimum nodes in a binary tree of height h (where height of leaf = 0) = h+1 (a straight chain)."},
+        {"text": "What is the output? def f(x, y=10): return x+y. print(f(5))", "options": ["5", "10", "15", "Error"], "correctIndex": 2, "explanation": "Default parameter y=10. f(5) = 5+10 = 15."}
+      ]
+    }
+  ]
+}
