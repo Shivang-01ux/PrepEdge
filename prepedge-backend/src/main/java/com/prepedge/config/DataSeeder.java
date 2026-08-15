@@ -214,23 +214,28 @@ public class DataSeeder implements CommandLineRunner {
                 String topicName   = section.topic()   != null ? section.topic()   : section.name();
 
                 Subject subject = subjectCache.computeIfAbsent(subjectName, k ->
-                        subjectRepository.findByName(k)
+                        subjectRepository.findAll().stream()
+                                .filter(s -> s.getName().equalsIgnoreCase(k))
+                                .findFirst()
                                 .orElseGet(() -> subjectRepository.save(
                                         Subject.builder().name(k).build())));
 
-                Topic topic = topicCache.computeIfAbsent(topicName, k ->
-                        topicRepository.findByName(k)
+                String topicCacheKey = subjectName + "::" + topicName;
+                Topic topic = topicCache.computeIfAbsent(topicCacheKey, k ->
+                        topicRepository.findBySubjectId(subject.getId()).stream()
+                                .filter(t -> t.getName().equalsIgnoreCase(topicName))
+                                .findFirst()
                                 .orElseGet(() -> topicRepository.save(
-                                        Topic.builder().name(k).subject(subject).build())));
+                                        Topic.builder().name(topicName).subject(subject).build())));
 
                 for (SeedInlineQuestion iq : section.questions()) {
                     Question q = Question.builder()
                             .text(iq.text())
-                            .subject(subject)
                             .topic(topic)
-                            .difficulty("MEDIUM")
+                            .difficulty(Difficulty.MEDIUM)
                             .explanation(iq.explanation() != null ? iq.explanation() : "")
                             .build();
+
                     q = questionRepository.save(q);
 
                     List<Option> opts = new java.util.ArrayList<>();
