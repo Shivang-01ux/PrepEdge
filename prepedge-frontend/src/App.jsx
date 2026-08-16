@@ -15,6 +15,7 @@ import Leaderboard from './pages/Leaderboard'
 import AdminFaculty from './pages/admin/AdminFaculty'
 import FacultyUpload from './pages/faculty/FacultyUpload'
 import FacultyStudents from './pages/faculty/FacultyStudents'
+import FacultyCreateAssessment from './pages/faculty/FacultyCreateAssessment'
 
 /** Redirect after login based on role */
 function RoleRedirect() {
@@ -76,6 +77,11 @@ export default function App() {
             <Route path="faculty/upload" element={
               <RoleRoute allowed={['ROLE_FACULTY', 'ROLE_ADMIN']}>
                 <FacultyUpload />
+              </RoleRoute>
+            } />
+            <Route path="faculty/create-assessment" element={
+              <RoleRoute allowed={['ROLE_FACULTY', 'ROLE_ADMIN']}>
+                <FacultyCreateAssessment />
               </RoleRoute>
             } />
             <Route path="faculty/students" element={
