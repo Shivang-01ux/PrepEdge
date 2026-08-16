@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axiosInstance from '../../api/axiosInstance'
 
 const API = import.meta.env.VITE_API_URL || 'https://prepedge-backend-4aoe.onrender.com/api'
 
@@ -16,7 +16,7 @@ export default function TestAccess() {
 
   // Quick check slug exists (GET metadata without password)
   useEffect(() => {
-    axios.get(`${API}/test/${slug}/info`)
+    axiosInstance.get(`/test/${slug}/info`)
       .then(r => { setMeta(r.data); setChecking(false) })
       .catch(() => setChecking(false))   // if no info endpoint, just show form
   }, [slug])
@@ -28,7 +28,7 @@ export default function TestAccess() {
     setError(''); setLoading(true)
 
     try {
-      const res = await axios.post(`${API}/test/${slug}/verify`, { password: form.password })
+      const res = await axiosInstance.post(`/test/${slug}/verify`, { password: form.password })
       // Navigate to exam passing name + password via state (never stored in DB)
       navigate(`/test/${slug}/exam`, {
         state: {

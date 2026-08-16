@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-
-const API = import.meta.env.VITE_API_URL || 'https://prepedge-backend-4aoe.onrender.com/api'
+import axiosInstance from '../../api/axiosInstance'
 
 export default function TestExam() {
   const { slug } = useParams()
@@ -21,6 +19,7 @@ export default function TestExam() {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [timeLeft, setTimeLeft] = useState((durationMinutes || 30) * 60)
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [result, setResult] = useState(null)
   const [submitting, setSubmitting] = useState(false)
@@ -34,14 +33,16 @@ export default function TestExam() {
   // ── Load questions ─────────────────────────────────────────────────────
   useEffect(() => {
     if (!password) return
-    axios.post(`${API}/test/${slug}/questions`, { password })
+    axiosInstance.post(`/test/${slug}/questions`, { password })
       .then(r => {
         setQuestions(r.data.questions || [])
         setTimeLeft((r.data.durationMinutes || durationMinutes || 30) * 60)
         setLoading(false)
       })
-      .catch(() => {
-        navigate(`/test/${slug}`, { replace: true })
+      .catch(err => {
+        const msg = err.response?.data?.message || 'Failed to load test. Please try again.'
+        setLoadError(msg)
+        setLoading(false)
       })
   }, [slug, password])
 
@@ -68,7 +69,7 @@ export default function TestExam() {
     } catch (_) {}
 
     try {
-      const res = await axios.post(`${API}/test/${slug}/submit`, {
+      const res = await axiosInstance.post(`/test/${slug}/submit`, {
         password,
         studentName,
         answers: currentAnswers || {},
@@ -186,6 +187,23 @@ export default function TestExam() {
         <div style={{ fontSize: '32px', marginBottom: '12px' }}>⏳</div>
         <div style={{ fontSize: '18px', fontWeight: '600' }}>Loading your test…</div>
         <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '6px' }}>Please wait</div>
+      </div>
+    </div>
+  )
+
+  // ── LOAD ERROR ─────────────────────────────────────────────────────────
+  if (loadError) return (
+    <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+      <div style={{ textAlign: 'center', color: '#fff', maxWidth: '400px' }}>
+        <div style={{ fontSize: '40px', marginBottom: '12px' }}>⚠️</div>
+        <div style={{ fontSize: '20px', fontWeight: '700', marginBottom: '8px' }}>Could not load test</div>
+        <div style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '24px' }}>{loadError}</div>
+        <button
+          onClick={() => navigate(`/test/${slug}`, { replace: true })}
+          style={{ padding: '10px 24px', background: '#059669', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}
+        >
+          ← Go Back
+        </button>
       </div>
     </div>
   )
