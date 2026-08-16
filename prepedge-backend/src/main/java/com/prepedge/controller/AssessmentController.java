@@ -34,6 +34,23 @@ public class AssessmentController {
     private final AssessmentLinkRepository assessmentLinkRepository;
 
     /**
+     * Public info — no password needed.
+     * Returns title, duration and question count so the access page
+     * can show "You are joining: [Assessment Name]" before password entry.
+     */
+    @GetMapping("/{slug}/info")
+    public ResponseEntity<?> getInfo(@PathVariable String slug) {
+        return assessmentLinkRepository.findBySlug(slug)
+                .filter(AssessmentLink::isActive)
+                .map(a -> ResponseEntity.ok(Map.of(
+                        "title", a.getTitle(),
+                        "durationMinutes", a.getDurationMinutes(),
+                        "questionCount", a.getQuestions().size()
+                )))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
      * Step 1: Verify password and return assessment metadata.
      * Students hit this first — no questions yet, just confirm access.
      */

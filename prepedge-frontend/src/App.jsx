@@ -16,6 +16,8 @@ import AdminFaculty from './pages/admin/AdminFaculty'
 import FacultyUpload from './pages/faculty/FacultyUpload'
 import FacultyStudents from './pages/faculty/FacultyStudents'
 import FacultyCreateAssessment from './pages/faculty/FacultyCreateAssessment'
+import TestAccess from './pages/test/TestAccess'
+import TestExam from './pages/test/TestExam'
 
 /** Redirect after login based on role */
 function RoleRedirect() {
@@ -41,6 +43,10 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Public test access — no login required */}
+          <Route path="/test/:slug" element={<TestAccess />} />
+          <Route path="/test/:slug/exam" element={<TestExam />} />
 
           {/* Protected app routes */}
           <Route path="/app" element={<ProtectedRoute />}>
