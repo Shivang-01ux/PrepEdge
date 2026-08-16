@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext'
 import { login as loginApi } from '../api/authApi'
 
 export default function Login() {
-  const [tab, setTab] = useState('student')   // 'student' | 'recruiter'
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -17,13 +16,23 @@ export default function Login() {
     setLoading(true)
     try {
       const res = await loginApi(form)
-      login(res.data.token, {
+      const userData = {
         username: res.data.username,
         email: res.data.email,
         role: res.data.role,
         college: res.data.college,
-      })
-      navigate('/app/dashboard')
+        department: res.data.department,
+      }
+      login(res.data.token, userData)
+
+      // Role-based redirect
+      if (res.data.role === 'ROLE_ADMIN') {
+        navigate('/app/admin')
+      } else if (res.data.role === 'ROLE_FACULTY') {
+        navigate('/app/faculty')
+      } else {
+        navigate('/app/dashboard')
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid email or password')
     } finally {
@@ -36,12 +45,10 @@ export default function Login() {
     border: '1px solid var(--border-hover)', borderRadius: '9px',
     padding: '11px 14px', fontSize: '14px', color: 'var(--text-primary)',
     outline: 'none', transition: 'border-color 0.15s, box-shadow 0.15s',
+    boxSizing: 'border-box',
   }
-
   const onFocus = e => { e.target.style.borderColor = '#059669'; e.target.style.boxShadow = '0 0 0 3px var(--accent-glow)' }
   const onBlur  = e => { e.target.style.borderColor = 'var(--border-hover)'; e.target.style.boxShadow = 'none' }
-
-  const isRecruiter = tab === 'recruiter'
 
   return (
     <div style={{
@@ -81,35 +88,11 @@ export default function Login() {
           borderRadius: '16px', padding: '32px',
           boxShadow: '0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.06)',
         }}>
-
-          {/* ── Tab Switcher ── */}
-          <div style={{
-            display: 'flex', gap: '0', marginBottom: '28px',
-            background: 'var(--bg-primary)', borderRadius: '10px',
-            padding: '4px', border: '1px solid var(--border)',
-          }}>
-            {['student', 'recruiter'].map(t => (
-              <button
-                key={t}
-                onClick={() => { setTab(t); setError('') }}
-                style={{
-                  flex: 1, padding: '8px', fontSize: '13px', fontWeight: '600',
-                  border: 'none', borderRadius: '7px', cursor: 'pointer',
-                  background: tab === t ? '#059669' : 'transparent',
-                  color: tab === t ? '#fff' : 'var(--text-muted)',
-                  transition: 'all 0.2s',
-                }}
-              >
-                {t === 'student' ? 'Student' : 'Recruiter'}
-              </button>
-            ))}
-          </div>
-
           <h2 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '6px' }}>
             Welcome back
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '28px' }}>
-            {isRecruiter ? 'Recruiter Portal — Sign in to your account' : 'Sign in to continue your preparation'}
+            Sign in to continue — works for Student, Faculty & Admin
           </p>
 
           {error && (
@@ -126,28 +109,42 @@ export default function Login() {
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             <div>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '7px', letterSpacing: '0.05em' }}>
-                {isRecruiter ? 'WORK EMAIL' : 'EMAIL ADDRESS'}
+                EMAIL ADDRESS
               </label>
               <input
-                type="email" required value={form.email}
+                id="login-email"
+                type="email"
+                required
+                value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
-                placeholder={isRecruiter ? 'you@company.com' : 'you@college.edu'}
-                style={inputStyle} onFocus={onFocus} onBlur={onBlur}
+                placeholder="you@college.edu"
+                style={inputStyle}
+                onFocus={onFocus}
+                onBlur={onBlur}
               />
             </div>
+
             <div>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '7px', letterSpacing: '0.05em' }}>
                 PASSWORD
               </label>
               <input
-                type="password" required value={form.password}
+                id="login-password"
+                type="password"
+                required
+                value={form.password}
                 onChange={e => setForm({ ...form, password: e.target.value })}
                 placeholder="••••••••"
-                style={inputStyle} onFocus={onFocus} onBlur={onBlur}
+                style={inputStyle}
+                onFocus={onFocus}
+                onBlur={onBlur}
               />
             </div>
+
             <button
-              type="submit" disabled={loading}
+              id="login-submit"
+              type="submit"
+              disabled={loading}
               style={{
                 width: '100%',
                 background: loading ? 'var(--bg-hover)' : 'linear-gradient(135deg, #059669, #047857)',
@@ -159,11 +156,26 @@ export default function Login() {
                 transition: 'all 0.2s', marginTop: '4px',
               }}
             >
-              {loading ? '⏳ Signing in...' : isRecruiter ? 'Sign In as Recruiter →' : 'Sign In →'}
+              {loading ? '⏳ Signing in...' : 'Sign In →'}
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', marginTop: '24px', fontSize: '13px', color: 'var(--text-muted)' }}>
+          {/* Role hint */}
+          <div style={{
+            marginTop: '20px', padding: '12px 14px',
+            background: 'var(--bg-primary)', borderRadius: '8px',
+            border: '1px solid var(--border)', fontSize: '12px',
+            color: 'var(--text-muted)', lineHeight: '1.6',
+          }}>
+            <div style={{ fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '4px' }}>
+              All roles use this same login:
+            </div>
+            <div>🎓 <strong>Students</strong> — register yourself</div>
+            <div>👨‍🏫 <strong>Faculty</strong> — credentials from your Admin</div>
+            <div>⚙️ <strong>Admin</strong> — <code style={{ fontSize: '11px' }}>admin@prepedge.com</code></div>
+          </div>
+
+          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text-muted)' }}>
             Don't have an account?{' '}
             <Link to="/register" style={{ color: '#34d399', fontWeight: '600', textDecoration: 'none' }}>
               Create one free
