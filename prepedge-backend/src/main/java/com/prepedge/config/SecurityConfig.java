@@ -47,6 +47,9 @@ public class SecurityConfig {
                 // Public endpoints
                 .requestMatchers("/api/auth/**").permitAll()
 
+                // Assessment test access — public (slug + password auth, no JWT)
+                .requestMatchers("/api/test/**").permitAll()
+
                 // Admin-only endpoints
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
